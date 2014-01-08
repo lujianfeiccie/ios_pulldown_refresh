@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>BF2402F0-147E-459E-A12B-EEC918221D2E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>tableview_pull_refresh</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>E91C2EA9-A8BE-4D99-8949-0BD5CF424115</key>
+		<string>https://github.com/lujianfeiccie/ios_pulldown_refresh.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>tableview_pull_refresh.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>E91C2EA9-A8BE-4D99-8949-0BD5CF424115</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/lujianfeiccie/ios_pulldown_refresh.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E91C2EA9-A8BE-4D99-8949-0BD5CF424115</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E91C2EA9-A8BE-4D99-8949-0BD5CF424115</string>
+			<key>IDESourceControlWCCName</key>
+			<string>tableview_pull_refresh</string>
+		</dict>
+	</array>
+</dict>
+</plist>

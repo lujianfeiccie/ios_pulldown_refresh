@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "EGORefreshTableHeaderView.h"
-@interface ViewController : UIViewController<EGORefreshTableHeaderDelegate, UITableViewDelegate, UITableViewDataSource>
+#import "PullTableView.h"
+
+@interface ViewController : UIViewController
+<PullTableViewDelegate>
 {
-  EGORefreshTableHeaderView *_refreshHeaderView;
-    	BOOL _reloading;
-   
+    UITableView *_tableView;
+    NSArray *list;
 }
- @property (strong, nonatomic) NSArray *list;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-- (void)reloadTableViewDataSource;
-- (void)doneLoadingTableViewData;
 @end
