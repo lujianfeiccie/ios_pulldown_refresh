@@ -52,10 +52,13 @@
 -(void) onRefresh{
        NSLog(@"ViewController onRefresh");
     
-      [((PullTableView*)_tableView) performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0];
+      [((PullTableView*)_tableView) performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.0];
 
 }
-
+-(void) onMore{
+       NSLog(@"ViewController onMore");
+    [((PullTableView*)_tableView) performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.0];
+}
 #pragma mark -
 #pragma mark Memory Management
 

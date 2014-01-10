@@ -44,7 +44,10 @@ typedef enum{
 	CALayer *_arrowImage;
 	UIActivityIndicatorView *_activityView;
 	
-
+    NSString* tips1;
+    NSString* tips2;
+    NSString* tips3;
+    NSString* tips4;
 }
 
 @property(nonatomic,assign) id <EGORefreshTableHeaderDelegate> delegate;

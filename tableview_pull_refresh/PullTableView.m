@@ -18,6 +18,18 @@
         NSLog(@"PullTableView initWithFrame");
         // Initialization code
         // Do any additional setup after loading the view, typically from a nib.
+        hasAddHeader = NO;
+        hasAddFooter = NO;
+        tips1 = @"加载中";
+        tips2 = @"更多";
+        [self createTableHeader:frame];
+        [self createTableFooter];
+    }
+    return self;
+}
+
+-(void) createTableHeader:(CGRect)frame{
+    if (!hasAddHeader) {
         if (_refreshHeaderView == nil) {
             
             EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.bounds.size.height, frame.size.width, self.bounds.size.height)];
@@ -29,20 +41,65 @@
             _refreshHeaderView = view;
             view = nil;
         }
+        hasAddHeader = YES;
     }
-    return self;
+}
+// 创建表格底部
+- (void) createTableFooter
+{
+    if(!hasAddFooter){
+        tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.bounds.size.width, 60.0f)];
+        
+        //加入载入更多提示
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loadMore)];
+        [self addGestureRecognizer:singleTap];
+        
+    
+        loadMoreText = [[UILabel alloc] initWithFrame:CGRectMake(self.bounds.size.width/2, 0.0f, 50.0f, 60.0f)];
+        [loadMoreText setCenter:tableFooterView.center];
+        [loadMoreText setFont:[UIFont fontWithName:@"Helvetica Neue" size:14]];
+        [loadMoreText setText:tips2];
+        [tableFooterView addSubview:loadMoreText];
+    
+    
+        activityIndicatorView = [[ UIActivityIndicatorView alloc ]
+                initWithFrame:CGRectMake(self.bounds.size.width-50.0,14,30.0,30.0)];
+    
+        activityIndicatorView.activityIndicatorViewStyle= UIActivityIndicatorViewStyleGray;
+    
+        [tableFooterView addSubview:activityIndicatorView];
+    
+    /*if (loading) {
+        [activityIndicatorView startAnimating];
+    }else{
+        [activityIndicatorView stopAnimating];
+    }*/
+            
+    self.tableFooterView = tableFooterView;
+        hasAddFooter = YES;
+    }
+}
+-(void)loadMore{
+    if (!_reloading) {
+        _reloading = YES;
+        loadMoreText.text = tips1;
+        [activityIndicatorView startAnimating];
+        if (_delegate_for_pull!=Nil) {
+            [_delegate_for_pull onMore];
+        }
+    }
 }
 #pragma mark -
 #pragma mark UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSLog(@"PullTableView numberOfSectionsInTableView");
+    //NSLog(@"PullTableView numberOfSectionsInTableView");
     return 1;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSLog(@"PullTableView numberOfRowsInSection %i",section);
+    //NSLog(@"PullTableView numberOfRowsInSection %i",section);
     return _list.count;
 }
 
@@ -56,7 +113,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
 	
-    NSLog(@"PullTableView titleForHeaderInSection");
+   // NSLog(@"PullTableView titleForHeaderInSection");
 	return [NSString stringWithFormat:@"Section %i", section];
 	
 }
@@ -71,7 +128,7 @@
 	//  put here just for demo
     
 	_reloading = YES;
-    NSLog(@"PullTableView reloadTableViewDataSource");
+    //NSLog(@"PullTableView reloadTableViewDataSource");
 	
 }
 
@@ -80,7 +137,9 @@
 	//  model should call this when its done loading
 	_reloading = NO;
 	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:self];
-    NSLog(@"PullTableView doneLoadingTableViewData");
+    [activityIndicatorView stopAnimating];
+    loadMoreText.text = tips2;
+    //NSLog(@"PullTableView doneLoadingTableViewData");
 }
 
 
@@ -104,13 +163,14 @@
 #pragma mark EGORefreshTableHeaderDelegate Methods
 
 - (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
-	
-	[self reloadTableViewDataSource];
-    if (_delegate_for_pull!=Nil) {
-        [_delegate_for_pull onRefresh];
+	if (!_reloading) {
+        [self reloadTableViewDataSource];
+        if (_delegate_for_pull!=Nil) {
+            [_delegate_for_pull onRefresh];
+        }
+
     }
-//	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0];
-    NSLog(@"PullTableView egoRefreshTableHeaderDidTriggerRefresh");
+	    //NSLog(@"PullTableView egoRefreshTableHeaderDidTriggerRefresh");
 }
 
 - (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
@@ -120,7 +180,7 @@
 }
 
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
-    NSLog(@"PullTableView egoRefreshTableHeaderDataSourceLastUpdated");
+   // NSLog(@"PullTableView egoRefreshTableHeaderDataSourceLastUpdated");
 	return [NSDate date]; // should return date data source was last changed
 	
 }
