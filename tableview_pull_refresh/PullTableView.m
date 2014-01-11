@@ -10,6 +10,7 @@
 
 @implementation PullTableView
 @synthesize list = _list;
+@synthesize delegate_for_pull =_delegate_for_pull;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -24,10 +25,20 @@
         tips2 = @"更多";
         [self createTableHeader:frame];
         [self createTableFooter];
+        
+    
     }
     return self;
 }
-
+-(void) showRefreshing{
+    NSLog(@"showRefreshing");
+    [self setContentOffset:CGPointMake(0, -75) animated:YES];
+    [self performSelector:@selector(doneManualRefresh) withObject:nil afterDelay:0.4];
+}
+-(void)doneManualRefresh{
+    [_refreshHeaderView egoRefreshScrollViewDidScroll:self];
+    [_refreshHeaderView egoRefreshScrollViewDidEndDragging:self];
+}
 -(void) createTableHeader:(CGRect)frame{
     if (!hasAddHeader) {
         if (_refreshHeaderView == nil) {
@@ -40,6 +51,7 @@
             [self addSubview:view];
             _refreshHeaderView = view;
             view = nil;
+            [_refreshHeaderView refreshLastUpdatedDate];
         }
         hasAddHeader = YES;
     }
@@ -87,6 +99,15 @@
         if (_delegate_for_pull!=Nil) {
             [_delegate_for_pull onMore];
         }
+    }
+}
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+   /* NSLog(@"content offsetY = %f content Size height =%f frame.height =%f"
+          ,scrollView.contentOffset.y,scrollView.contentSize.height,scrollView.frame.size.height);*/
+    if (scrollView.contentOffset.y == scrollView.contentSize.height - scrollView.frame.size.height) {
+        //滑到底部加载更多
+//        NSLog(@"滑到底部加载更多");
+        [self loadMore];
     }
 }
 #pragma mark -

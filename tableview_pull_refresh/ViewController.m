@@ -23,7 +23,7 @@
     [self.view addSubview:_tableView];
     
     NSArray *array = [[NSArray alloc] initWithObjects:@"美国", @"菲律宾",
-                      @"黄岩岛", @"中国" , nil];
+                     nil];
     
     list =array;
     
@@ -31,6 +31,12 @@
     ((PullTableView*)_tableView).delegate_for_pull = self;
     //[_tableView reloadData];
     NSLog(@"viewDidLoad");
+    
+    
+
+}
+-(void)viewDidLayoutSubviews{
+    [(PullTableView*)_tableView showRefreshing];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *CellIdentifier = @"Cell";

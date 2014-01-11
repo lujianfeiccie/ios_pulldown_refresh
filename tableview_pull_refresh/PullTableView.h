@@ -34,4 +34,8 @@
  @property id<PullTableViewDelegate> delegate_for_pull;
 
 - (void)doneLoadingTableViewData;
+
+-(void) showRefreshing;
+
+-(void)doneManualRefresh;
 @end
