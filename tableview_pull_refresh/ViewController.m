@@ -18,26 +18,52 @@
 {
     [super viewDidLoad];
     
-    _tableView = [[PullTableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
  
     [self.view addSubview:_tableView];
     
     NSArray *array = [[NSArray alloc] initWithObjects:@"美国", @"菲律宾",
+                      @"美国", @"菲律宾",
+                      @"美国", @"菲律宾",
+                      @"美国", @"菲律宾",
+                      @"美国", @"菲律宾",
                      nil];
-    
     list =array;
     
-    ((PullTableView*)_tableView).list = list;
-    ((PullTableView*)_tableView).delegate_for_pull = self;
     //[_tableView reloadData];
     NSLog(@"viewDidLoad");
     
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
     
+    refreshView = [[RefreshView alloc] initWithOwner:_tableView delegate:self];
+    // 初始刷新
+    [self refresh];
 
 }
--(void)viewDidLayoutSubviews{
-    [(PullTableView*)_tableView showRefreshing];
+// 停止，可以触发自己定义的停止方法
+- (void)stopLoading {
+    [refreshView stopLoading];
 }
+// 开始，可以触发自己定义的开始方法
+- (void)startLoading {
+    [refreshView startLoading];
+    // 模拟3秒后停止
+    [self performSelector:@selector(stopLoading) withObject:nil afterDelay:3];
+}
+// 刷新
+- (void)refresh {
+    [self startLoading];
+}
+#pragma mark - RefreshViewDelegate
+- (void)refreshViewDidCallBack {
+    NSLog(@"refreshViewDidCallBack");
+    [self refresh];
+}
+- (void) moreViewdDidCallBack{
+     [self performSelector:@selector(stopLoading) withObject:nil afterDelay:3];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *CellIdentifier = @"Cell";
     
@@ -54,28 +80,15 @@
     NSLog(@"PullTableView cellForRowAtIndexPath %i %@",row,cell.textLabel.text);
     return cell;
 }
-
--(void) onRefresh{
-       NSLog(@"ViewController onRefresh");
-    
-      [((PullTableView*)_tableView) performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.0];
-
+#pragma mark - Table view data source
+// Customize the number of sections in the table view.
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
 }
--(void) onMore{
-       NSLog(@"ViewController onMore");
-    [((PullTableView*)_tableView) performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:1.0];
+// Customize the number of rows in the table view.
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return [list count];
 }
-#pragma mark -
-#pragma mark Memory Management
-
-- (void)didReceiveMemoryWarning {
-    		   NSLog(@"didReceiveMemoryWarning");
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidUnload {
-    	   NSLog(@"viewDidUnload");
-}
-
 
 @end
+

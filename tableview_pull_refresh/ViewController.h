@@ -7,13 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EGORefreshTableHeaderView.h"
-#import "PullTableView.h"
+#import "RefreshView.h"
 
 @interface ViewController : UIViewController
-<PullTableViewDelegate>
+<RefreshViewDelegate,
+UITableViewDataSource,
+UITableViewDelegate>
 {
     UITableView *_tableView;
+    RefreshView *refreshView;
     NSArray *list;
 }
 @end
